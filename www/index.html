@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Webpage</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<body>
+    <div class="center">
+        <div class="calendar-section">
+            <div>
+                <h1 id="tracking-main-label">2025</h1>
+            </div>
+            <div class="controls">
+                <label>
+                    <input type="radio" name="viewOption" value="all" checked>
+                    All
+                </label>
+                <label>
+                    <input type="radio" name="viewOption" value="monthly">
+                    Monthly
+                </label>
+            </div>
+            <div id="tileGrid"></div>
+        </div>
+    </div>
+    <div class="left-bar" id="leftBar">
+        <button id="left-bar-close-button">X</button>
+        <p id="left-bar-date-info"></p>
+        <input id="left-bar-input" type="text" />
+        <button id="left-bar-submit-button" type="button">Submit</button>
+    </div>
+    <div class="right-bar" id="rightBar">
+        <button class="menu-select-view-button" id="login-view-btn">Login</button>
+        <button class="menu-select-view-button" id="logout-btn">Logout</button>
+        <button class="menu-select-view-button" id="trackings-view-btn">Trackings</button>
+        <p id="right-bar-current-menu-title">Trackings</p>
+        <div id="right-bar-trackings-menu" class="right-bar-menu-tab">
+            <div id="tracking-item-add-new">
+                <span><b>+</b>&nbsp;Add new tracking</span>
+            </div>
+            <div id="tracking-item-login-hint">
+                <span><i>Login to add new year trackings</i></span>
+            </div>
+            <div id="right-bar-tracking-list">
+            </div>
+        </div>
+        <div id="right-bar-edit-tracking-form" class="tracking-form right-bar-menu-tab">
+            <label for="tracking-name" class="form-label">Name</label>
+            <input type="text" id="tracking-name" class="form-input" placeholder="Enter name" />
+        
+            <label for="tracking-description" class="form-label">Description</label>
+            <textarea id="tracking-description" class="form-textarea" placeholder="Enter description"></textarea>
+        
+            <label for="condition-type" class="form-label">Condition Type</label>
+            <select id="condition-type" class="form-select">
+                <option value="equals">Is equal to</option>
+                <option value="bigger">Is bigger than</option>
+                <option value="smaller">Is smaller than</option>
+                <option value="biggerorequal">Is bigger or equal to</option>
+                <option value="smallerorequal">Is smaller or equal to</option>
+                <option value="contains">Contains text</option>
+            </select>
+        
+            <label for="condition-value" class="form-label">Condition Value</label>
+            <input type="text" id="condition-value" class="form-input" placeholder="Enter value" />
+        
+            <label for="condition-unit" class="form-label">Condition Unit</label>
+            <input type="text" id="condition-unit" class="form-input" placeholder="Enter unit" />
+        
+            <label for="theme-color" class="form-label">Theme Color</label>
+            <input type="color" id="theme-color" class="form-color-picker" />
+        
+            <button id="right-bar-add-new-tracking-submit-button" class="form-button" type="button">
+                Submit
+            </button>
+            <button id="right-bar-edit-tracking-submit-button" class="form-button" type="button">
+                Submit
+            </button>
+            <button id="right-bar-add-new-tracking-cancel-button" class="right-bar-cancel-button form-button" type="button">
+                Cancel
+            </button>
+        </div>
+        <div id="right-bar-login-form" class="right-bar-menu-tab">
+            <label for="login-login" class="form-label">Login</label>
+            <input type="text" id="login-login" class="form-input" placeholder="Enter login" />
+            <label for="login-password" class="form-label">Password</label>
+            <input type="password" id="login-password" class="form-input" placeholder="Enter password" />
+            <p class="login-option" id="register-account-option-p">I don't have an account</p>
+            <!-- <p class="login-option" id="forgot-password-option-p">I forgot my passsword</p> -->
+            <button id="right-bar-login-submit-button" class="form-button" type="button">
+                Login
+            </button>
+            <button id="right-bar-add-new-tracking-cancel-button" class="right-bar-cancel-button form-button" type="button">
+                Cancel
+            </button>
+        </div>
+        <div id="right-bar-register-form" class="right-bar-menu-tab">
+            <label for="register-email" class="form-label">E-mail</label>
+            <input type="text" id="register-email" class="form-input" placeholder="Enter e-mail address" />
+            <label for="register-password" class="form-label">Password</label>
+            <input type="password" id="register-password" class="form-input" placeholder="Enter password" />
+            <label for="register-password-repeat" class="form-label">Repeat password</label>
+            <input type="password" id="register-password-repeat" class="form-input" placeholder="Repeat the same password" />
+            <button id="right-bar-register-submit-button" class="form-button" type="button">
+                Register
+            </button>
+            <button id="right-bar-add-new-tracking-cancel-button" class="right-bar-cancel-button form-button" type="button">
+                Cancel
+            </button>
+        </div>
+        <!-- <div id="right-bar-forgot-pwd-form" class="right-bar-menu-tab">
+            <label for="forgot-pwd-email" class="form-label">E-mail</label>
+            <input type="text" id="forgot-pwd-email" class="form-input" placeholder="Enter e-mail address" />
+            <button id="right-bar-forgot-pwd-submit-button" class="form-button" type="button">
+                Send
+            </button>
+            <button id="right-bar-add-new-tracking-cancel-button" class="right-bar-cancel-button form-button" type="button">
+                Cancel
+            </button>
+        </div> -->
+    </div>
+    <span>wegwe</span>
+    <button id="hamburgerMenu" class="hamburger">
+        <span id="login-status">Logged off</span>
+        <span>&nbsp;</span>
+        <span>☰</span>
+    </button>
+
+    <script src="day.js" type="text/javascript"></script>
+    <script src="yeartrack.js" type="text/javascript"></script>
+    <script src="condition.js" type="text/javascript"></script>
+    <script src="datamanager.js" type="text/javascript"></script>
+    <script src="leftbar.js" type="text/javascript"></script>
+    <script src="rightbar.js" type="text/javascript"></script>
+    <script src="login.js" type="text/javascript"></script>
+    <script src="main.js" type="text/javascript"></script>
+    <script src="trackingForm.js" type="text/javascript"></script>
+</body>
+</html>
