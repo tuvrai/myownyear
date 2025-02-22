@@ -46,7 +46,6 @@ class YearTrack {
   }
 
    getDateFromDayOfYear(dayOfYear, year) {
-    console.log(dayOfYear, year);
     const date = new Date(year, 0, 1);
     return this.addDays(date, dayOfYear - 1);
   }

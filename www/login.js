@@ -34,10 +34,13 @@ function onLogout()
     currentToken = undefined;
     currentUser = undefined;
     clearTrackingList();
+    selectFirstTrackingOrDefault();
     hideAllRightTabs();
     showTrackingsMenu();
     toggleLoginLogoutButtons();
     loginStatus.innerText = 'Logged off';
+
+    document.cookie = `currenttoken=; max-age=0`;
 }
 
 function onLogin()
@@ -133,14 +136,8 @@ document.getElementById('right-bar-login-submit-button').addEventListener('click
         const data = await response.json();
 
         if (response.ok) {
-            console.log('User logged in:', data);
-            currentUser = email;
-            loginStatus.innerText = email;
-            
             currentToken = data.token;
-
-            onLogin();
-
+            document.cookie = `currenttoken=${currentToken}; max-age=${60 * 60 * 24 * 7}`;
             await getCurrentUserTrackings();
         } else {
             alert(`Login failed: ${data.error}`);
@@ -155,7 +152,6 @@ document.getElementById('right-bar-login-submit-button').addEventListener('click
 logoutBtn.addEventListener('click', async () => {
     try {
         // Send the request
-        console.log(currentToken);
         const response = await fetch('/elogout', {
             method: 'POST',
             headers: {
@@ -168,8 +164,8 @@ logoutBtn.addEventListener('click', async () => {
         const data = await response.json();
         console.log(data);
         if (response.ok) {
-            console.log('User logged out', data);
             onLogout();
+            updateView();
         } else {
             alert(`Logout failed: ${data.error}`);
             console.error('Error:', data);

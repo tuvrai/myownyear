@@ -46,7 +46,6 @@ submitButton.addEventListener('click', () => {
     showTrackingsMenu();
     const tracking = new YearTrack(trackingName.value, 2025);
     tracking.id = getFreeId();
-    console.log(tracking.id);
     tracking.description = trackingDescription.value;
     tracking.themeColor = themeColor.value;
     tracking.setConditionType(getConditionType(conditionType.value));

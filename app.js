@@ -18,7 +18,8 @@ createTables();
 
 // Create the HTTP server
 http.createServer((req, res) => {
-  if (req.method === 'GET') {
+  if (req.method === 'GET')
+  {
     if (req.url.startsWith('/api/trackings'))
     {
       const trackingName = req.url.split('/api/trackings/')[1]; // Extract the file name (if any)
@@ -142,96 +143,7 @@ http.createServer((req, res) => {
   } 
   else if (req.method === 'POST') 
   {
-    if (req.url.startsWith('/api/trackings/update/'))
-    {
-      const trackingId = req.url.split('/api/trackings/update/')[1];
-      let filePath = idToFileMap.get(trackingId);
-      let data = '';
-      req.on('data', chunk => {
-          data += chunk;
-      });
-
-      req.on('end', () => {
-          try {
-              if (!filePath)
-              {
-                const simplifiedName = replaceLocalLetters(extractAttributeFromJson(data.toString(), "name").toLowerCase());
-                const fileName = `${trackingId}_${simplifiedName}.json`;
-                filePath = path.join(trackingsDir, fileName);
-                idToFileMap.set(trackingId.toString(), filePath);
-              }
-              updateJsonFile(filePath, data.toString());
-              res.writeHead(200, { 'Content-Type': 'application/json' });
-              res.end(JSON.stringify({ message: 'Tracking updated successfully', fileName: filePath }));
-          } catch (err) {
-              res.writeHead(400, { 'Content-Type': 'application/json' });
-              res.end(JSON.stringify({ error: 'Invalid JSON data' }));
-          }
-      });
-    }
-    else if (req.url.startsWith('/api/trackings/remove/'))
-    {
-      const trackingId = req.url.split('/api/trackings/remove/')[1];
-      let filePath = idToFileMap.get(trackingId);
-      if (filePath) {
-        fs.unlink(filePath, () =>{});
-        idToFileMap.delete(trackingId);
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ message: 'Tracking removed successfully', fileName: filePath }));
-      }
-      else {
-        res.writeHead(404, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ message: 'Tracking with given ID does not exist', fileName: filePath }));
-      }
-    } 
-    else if (req.url.startsWith('/register'))
-    {
-      let body = '';
-
-    // Collect the data from the request body
-    req.on('data', chunk => {
-      body += chunk;
-    });
-
-    req.on('end', async () => {
-      try {
-        // Parse the JSON payload
-        const { email, password } = JSON.parse(body);
-
-        if (!email || !password) {
-          res.statusCode = 400;
-          res.end(JSON.stringify({ error: 'Email and password are required' }));
-          return;
-        }
-
-        const userExists = getUserId(email) != null;
-
-        if (userExists) {
-          res.statusCode = 400;
-          res.end(JSON.stringify({ error: 'This email address is already registered' }));
-          return;
-        }
-
-        // Hash the password (replace with your actual password hashing logic)
-        const bcrypt = require('bcrypt');
-        const passwordHash = await bcrypt.hash(password, 10);
-
-        // Insert the user into the database
-        const userId = await insertUser(email, passwordHash);
-
-        // Send a response back
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify({ id: userId, email: email }));
-
-      } catch (error) {
-        res.statusCode = 500;
-        res.end(JSON.stringify({ error: 'An error occurred while registering the user' }));
-        console.error('Error during user registration:', error);
-      }
-    });
-    }
-    else if (req.url.startsWith('/eregister'))
+    if (req.url.startsWith('/eregister'))
     {
       let body = '';
 
@@ -371,7 +283,7 @@ http.createServer((req, res) => {
     });
     }
     else if (req.url.startsWith('/api/trackings/eupdate/'))
-      {
+    {
         const trackingId = req.url.split('/api/trackings/eupdate/')[1];
         let data = '';
         req.on('data', chunk => {
@@ -408,8 +320,9 @@ http.createServer((req, res) => {
                 console.log(err.toString());
             }
         });
-      }
-      else if (req.url.startsWith('/api/etrackings')) {
+    }
+    else if (req.url.startsWith('/api/etrackings'))
+    {
         let body = '';
   
         // Collect the data from the request body
@@ -421,6 +334,7 @@ http.createServer((req, res) => {
           try {
             // Parse the JSON payload
             console.log(body);
+            console.log(req.cookies);
             const jsonData = JSON.parse(body);
             const session = sessions.get(jsonData.token);
   
@@ -428,7 +342,7 @@ http.createServer((req, res) => {
             {
               const combinedData = await dirdb.decryptAllUserFiles(session.userID, session.masterKey);
               res.writeHead(200, { 'Content-Type': 'application/json' });
-              res.end(JSON.stringify({trackings: combinedData}));
+              res.end(JSON.stringify({trackings: combinedData, userID: session.userID}));
             }
             else
             {
@@ -445,8 +359,9 @@ http.createServer((req, res) => {
             console.error('Error during user registration:', error);
           }
         });
-      }
-    else if (req.url.startsWith('/api/trackings/eremove')) {
+    }
+    else if (req.url.startsWith('/api/trackings/eremove'))
+    {
       let body = '';
   
       // Collect the data from the request body

@@ -343,6 +343,9 @@ async function fetchTrackings() {
             if (response.ok) {
                 console.log(data.trackings);
                 reloadTrackings(data.trackings);
+                currentUser = data.userID;
+                loginStatus.innerText = data.userID;
+                onLogin();
                 updateView();
             } else {
                 alert(`Trackings failed: ${data.error}`);
@@ -376,7 +379,28 @@ async function fetchTrackings() {
             x.style.display = 'none';
         });
     }
+    
 reloadTrackings([]);
 updateView();
 toggleLoginLogoutButtons();
 
+setCurrentSessionFromCookie();
+
+function setCurrentSessionFromCookie()
+{
+    const sessionvalue = getCookie("currenttoken");
+    if (sessionvalue != null && sessionvalue != undefined && sessionvalue.trim().length > 4)
+    {
+        currentToken = sessionvalue.trim();
+        getCurrentUserTrackings();
+    }
+}
+
+function getCookie(name) {
+    const cookies = document.cookie.split(';');
+    for (const cookie of cookies) {
+        const [key, value] = cookie.trim().split('=');
+        if (key === name) return decodeURIComponent(value);
+    }
+    return null;
+}
