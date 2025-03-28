@@ -1,0 +1,6 @@
+{
+  "salt": "f627476b1223015505933bfe14855f34",
+  "iv": "a350efb67b8aeb18cd29bf83",
+  "authTag": "95c06cb2cc4a63be094ba54de597e117",
+  "ciphertext": "fc991a11efacdfdd2c775643be0463e730e32f868e2c442d1d5b5cd96adee160"
+}
