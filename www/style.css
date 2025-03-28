@@ -435,3 +435,15 @@ grid-column: span 7;
     cursor: pointer;
     color: #007bff;
 }
+
+.register-message {
+    font-size: 1rem;
+}
+
+.register-message-nok {
+    color: rgba(244, 74, 74, 0.874)
+}
+
+.register-message-ok {
+    color: rgba(47, 176, 32, 0.647)
+}

@@ -23,12 +23,22 @@ const daysInMonth = [
     31, 31, 30, 31, 30, 31
 ];
 
-document.addEventListener('keydown', (ev) => {
+document.addEventListener('keydown', async (ev) => {
     if (ev.key == "ArrowRight") {
         nextTile();
     }
     else if (ev.key == "ArrowLeft") {
         previousTile();
+    }
+    else if (ev.key == "Enter") {
+        if (loginForm.style.display == 'block')
+        {
+            OnLoginFormSubmitted();
+        }
+        else if (registerForm.style.display == 'block')
+        {
+            OnRegisterFormSubmitted();
+        }
     }
 });
 

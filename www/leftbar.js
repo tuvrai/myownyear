@@ -43,8 +43,8 @@ function showValueInLeftBar(value) {
 }
 
 leftBar.addEventListener('keydown', (ev) => {
-    if (ev.key === 'Enter' &&
-        leftBar.classList.contains('active')) {
+    if (ev.key === 'Enter' && leftBar.classList.contains('active'))
+    {
         onValueSubmit();
     }
 });

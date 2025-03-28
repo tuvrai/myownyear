@@ -12,9 +12,8 @@ const dirdb = require('./dirdb');
 // Define the base directories
 const baseDir = path.join(__dirname, 'www');
 const trackingsDir = path.join(baseDir, 'trackings');
-const idToFileMap = createIdToFileNameMap();
 
-createTables();
+// createTables();
 
 // Create the HTTP server
 http.createServer((req, res) => {
@@ -159,7 +158,7 @@ http.createServer((req, res) => {
 
         if (!email || !password) {
           res.statusCode = 400;
-          res.end(JSON.stringify({ error: 'Email and password are required' }));
+          res.end(JSON.stringify({ error: 'Login and password are required.' }));
           return;
         }
 
@@ -168,13 +167,13 @@ http.createServer((req, res) => {
         if (userExists)
         {
           res.statusCode = 400;
-          res.end(JSON.stringify({ error: 'This email address is already registered' }));
+          res.end(JSON.stringify({ error: 'User is already registered.' }));
           return;
         }
         else
         {
           await dirdb.createDir(email, password);
-          res.end(JSON.stringify({ error: 'Email registered.' }));
+          res.end(JSON.stringify({ error: '', msg: 'User registered successfully.' }));
           return;
         }
 
@@ -182,7 +181,7 @@ http.createServer((req, res) => {
 
       } catch (error) {
         res.statusCode = 500;
-        res.end(JSON.stringify({ error: 'An error occurred while registering the user' }));
+        res.end(JSON.stringify({ error: 'An error occurred while registering the user - '+error.toString() }));
         console.error('Error during user registration:', error);
       }
     });
@@ -333,8 +332,6 @@ http.createServer((req, res) => {
         req.on('end', async () => {
           try {
             // Parse the JSON payload
-            console.log(body);
-            console.log(req.cookies);
             const jsonData = JSON.parse(body);
             const session = sessions.get(jsonData.token);
   
@@ -409,39 +406,6 @@ http.createServer((req, res) => {
   console.log('HTTP Server is running on http://localhost:80');
 });
 
-function updateJsonFile(filePath, jsonData) {
-  fs.writeFileSync(filePath, jsonData, 'utf8');
-}
-
-function extractAttributeFromJson(jsonString, attribute) {
-  try {
-      const jsonObj = JSON.parse(jsonString);
-      return jsonObj[attribute];
-  } catch (error) {
-      console.error('Invalid JSON string', error);
-      return null;
-  }
-}
-
-function replaceLocalLetters(input) {
-  const localCharsMap = {
-      'ą': 'a', 'Ą': 'A',
-      'ć': 'c', 'Ć': 'C',
-      'ę': 'e', 'Ę': 'E',
-      'ł': 'l', 'Ł': 'L',
-      'ń': 'n', 'Ń': 'N',
-      'ó': 'o', 'Ó': 'O',
-      'ś': 's', 'Ś': 'S',
-      'ź': 'z', 'Ź': 'Z',
-      'ż': 'z', 'Ż': 'Z',
-      'ü': 'u', 'Ü': 'U',
-      'ß': 'ss', // for German 'sharp S'
-      // Add any other local characters here
-  };
-
-  // Replace local characters with their mapped values
-  return input.replace(/[ąćęłńóśźżüßĄĆĘŁŃÓŚŹŻÜ]/g, match => localCharsMap[match] || match);
-}
 
 // Simple in-memory session store
 const sessions = new Map(); // sessionID -> { userID, masterKey, createdAt, ... }
@@ -469,35 +433,4 @@ function createSession(userID, masterKey) {
     createdAt: Date.now()
   });
   return sessionID;
-}
-
-function createIdToFileNameMap() {
-  const idToFileMap = new Map();
-  const files = fs.readdirSync(trackingsDir);
-  files.forEach(file => {
-      const filePath = path.join(trackingsDir, file);
-      if (path.extname(file) === '.json') {
-          try {
-              const fileContent = fs.readFileSync(filePath, 'utf8');
-              const jsonData = JSON.parse(fileContent);
-              if (jsonData.id) {
-                  idToFileMap.set(jsonData.id.toString(), filePath);
-              } else {
-                  console.warn(`File ${file} does not have an 'id' property.`);
-              }
-          } catch (err) {
-              console.error(`Error reading or parsing ${file}:`, err);
-          }
-      }
-  });
-
-  for (const [key, value] of idToFileMap) {
-    console.log(`Key: ${key}, Value: ${value}`);
-  }
-  return idToFileMap;
-}
-
-// Helper to fetch session info
-function getSession(sessionID) {
-  return sessions.get(sessionID) || null;
 }
