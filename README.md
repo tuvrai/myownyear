@@ -22,6 +22,7 @@ A minimal and visually engaging web app for tracking your yearly goals with a gr
 - Vanilla JS
 - Vanilla Node.JS
 - CSS/HTML
+- DB: Encrypted directories, each for one user, with his encrypted data
 
 ## Contributing
 Pull requests are welcome! Please open an issue first to discuss any significant changes.
